@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+const { gql, UserInputError } = require("apollo-server-express");
 const fs = require("fs");
 const userSchema = fs.readFileSync(`${__dirname}/user.schema.gql`, "utf-8");
 
@@ -15,6 +15,21 @@ const resolver = {
       const result = await User.findAll();
 
       return result;
+    },
+    async getUserById(parent, args) {
+      try {
+        const { userId } = args;
+
+        const result = await User.findOne({
+          where: {
+            id: userId,
+          },
+        });
+
+        return result;
+      } catch (err) {
+        throw new UserInputError("Data not found");
+      }
     },
   },
 

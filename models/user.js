@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -13,17 +11,72 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  User.init({
-    full_name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
-    profile_image_url: DataTypes.STRING,
-    age: DataTypes.INTEGER,
-    phone_number: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+  User.init(
+    {
+      full_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        unique: {
+          msg: "Email has been used",
+          args: true,
+        },
+        allowNull: {
+          msg: "email must be valid",
+          args: false,
+        },
+      },
+      username: {
+        type: DataTypes.STRING,
+        unique: {
+          msg: "Username has been used",
+          args: true,
+        },
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: {
+          msg: "password cannot be empty",
+          args: false,
+        },
+      },
+      profile_image_url: {
+        type: DataTypes.STRING,
+        validate: {
+          isUrl: {
+            msg: "Url must be valid",
+            args: true,
+          },
+        },
+        allowNull: {
+          msg: "url cannot be empty",
+          args: false,
+        },
+      },
+      age: {
+        type: DataTypes.INTEGER,
+        validate: {
+          isInt: {
+            msg: "age must be a number",
+            args: true,
+          },
+        },
+      },
+      phone_number: {
+        type: DataTypes.STRING,
+        allowNull: {
+          msg: "Phone number cannot be empty",
+          args: false,
+        },
+      },
+    },
+    {
+      sequelize,
+      modelName: "User",
+    }
+  );
   return User;
 };

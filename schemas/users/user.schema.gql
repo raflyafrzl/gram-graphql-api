@@ -1,0 +1,30 @@
+type User {
+  id: ID!
+  full_name: String!
+  email: String!
+  username: String!
+  password: String!
+  profile_image_url: String!
+  age: Int!
+  phone_number: String!
+  createdAt: String!
+  updatedAt: String!
+}
+input NewUser {
+  full_name: String!
+  email: String!
+  username: String!
+  password: String!
+  profile_image_url: String!
+  age: Int!
+  phone_number: String!
+}
+
+type Query {
+  getAllUser: [User]!
+}
+
+type Mutation {
+  insertUser(newUser: NewUser): User!
+  deleteUser(userId: ID!): String!
+}
